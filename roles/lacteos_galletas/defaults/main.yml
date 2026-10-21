@@ -1,0 +1,14 @@
+---
+# Variables por defecto del rol lacteos_galletas (Ángela)
+
+seccion_persona: "Ángela"
+seccion_nombre: "Lácteos y galletas"
+
+# Lácteos
+lacteos_leche: "Leche entera"
+lacteos_yogur: "Yogur natural"
+lacteos_queso: "Queso manchego"
+
+# Galletas
+galletas_chocolate: "Galletas con pepitas de chocolate"
+galletas_maria: "Galletas María"
