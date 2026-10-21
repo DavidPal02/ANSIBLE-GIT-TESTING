@@ -11,7 +11,8 @@ haciendo la compra.
 | Ricardo | `dev/ricardo` | Verduras y frutas |
 | Moisés  | `dev/moises`  | Carne y pescado |
 | Ángela  | `dev/angela`  | Lácteos y galletas |
-| Integración | `main`    | Las tres secciones |
+| David   | `dev/david`   | Bebidas y refrescos |
+| Integración | `main`    | Las cuatro secciones |
 
 ## Estructura
 
@@ -26,7 +27,8 @@ haciendo la compra.
 └── roles/
     ├── verduras_frutas/      # Ricardo
     ├── carne_pescado/        # Moisés
-    └── lacteos_galletas/     # Ángela
+    ├── lacteos_galletas/     # Ángela
+    └── bebidas_refrescos/    # David
 ```
 
 Cada rol contiene: `README.md`, `INSTRUCCIONES.md` (pistas), `SOLUCION.md`
@@ -50,10 +52,11 @@ ansible-playbook -i inventory-site.yml site.yml
 
 | Branch | Qué contiene | Cómo ejecutarlo |
 |---|---|---|
-| `main` | Proyecto completo (los 3 roles) | `ansible-playbook -i inventory-site.yml site.yml` |
+| `main` | Proyecto completo (los 4 roles) | `ansible-playbook -i inventory-site.yml site.yml` |
 | `dev/ricardo` | Solo verduras/frutas | mismo comando, solo imprime esa sección |
 | `dev/moises` | Solo carne/pescado | idem |
 | `dev/angela` | Solo lácteos/galletas | idem |
+| `dev/david` | Solo bebidas/refrescos | idem |
 
 ## Variables por defecto (jugando desde CLI)
 
@@ -62,7 +65,7 @@ ejecución puedes usar `-e`:
 
 ```bash
 ansible-playbook -i inventory-site.yml site.yml \
-  -e "carne_pollo='Pollo al curry' galletas_maria='Digestivas'"
+  -e "carne_pollo='Pollo al curry' galletas_maria='Digestivas' refrescos_cola='Cola zero'"
 ```
 
 ## CI
