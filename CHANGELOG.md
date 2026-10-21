@@ -14,4 +14,4 @@ y este proyecto se adhiere al [Semantic Versioning](https://semver.org/lang/es/)
 - Documentación por rol: `README.md`, `INSTRUCCIONES.md`, `SOLUCION.md`.
 - Inventario local (`localhost ansible_connection=local`).
 - Configuración de CI con `.travis.yml`.
-- Rama `survey` con parametrización de `defaults` y `site_survey.yml` con `vars_files`.
+- Rama `dev/david` (bebidas y refrescos) añadida e integrada en `main`.
