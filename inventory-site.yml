@@ -1,0 +1,8 @@
+---
+# Inventario dedicado al playbook site.yml.
+# En dev/moises solo se ejecuta el rol carne_pescado.
+
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
