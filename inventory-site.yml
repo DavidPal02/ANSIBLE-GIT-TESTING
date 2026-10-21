@@ -1,0 +1,9 @@
+---
+# Inventario dedicado al playbook site.yml (rama main).
+# Mismo contenido que inventory, separado para reflejar la convención
+# inventario ↔ playbook cuando el proyecto crezca.
+
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
