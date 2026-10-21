@@ -1,130 +1,69 @@
 # INSTRUCCIONES — Rol carne_pescado (Moisés)
 
-Tutorial paso a paso. Si te atascas, [SOLUCION.md](SOLUCION.md) tiene los ficheros completos.
+> **Pistas estilo bash** para construir el rol. Piénsalo como un script y luego
+> adáptalo a la sintaxis de Ansible (que es prácticamente la misma).
 
-## 1. Objetivo
-Imprimir la lista de carnes y pescados que Moisés ha comprado.
+## Paso 1 · Carpeta y variables
 
-## 2. Crear la estructura
-
-```bash
-mkdir -p roles/carne_pescado/{defaults,handlers,meta,tasks,vars}
-```
-
-## 3. `defaults/main.yml`
-
-```yaml
----
-seccion_persona: "Moisés"
-seccion_nombre: "Carne y pescado"
-
-carne_pollo: "Contramuslos de pollo"
-carne_pavo: "Pechugas de pavo al ajillo"
-carne_ternera: "Filetes de ternera"
-
-pescado_salmon: "Salmón fresco"
-pescado_merluza: "Merluza en rodajas"
-```
-
-## 4. `vars/main.yml`
-
-```yaml
----
-rol_autor: "Moisés"
-rol_seccion: "carne y pescado"
-rol_version: "0.1.0"
-```
-
-## 5. `meta/main.yml`
-
-```yaml
----
-galaxy_info:
-  role_name: carne_pescado
-  author: Moisés
-  description: Rol educativo que simula la compra de carne y pescado.
-  license: MIT
-  min_ansible_version: "2.14"
-  platforms:
-    - name: local
-      versions:
-        - all
-  galaxy_tags:
-    - learning
-    - family
-    - compras
-
-dependencies: []
-```
-
-## 6. `tasks/main.yml`
-
-```yaml
----
-- name: "Mostrar sección que gestiona {{ seccion_persona }}"
-  ansible.builtin.debug:
-    msg: "Sección: {{ seccion_nombre }} (autor: {{ rol_autor }})"
-
-- name: "Listar carnes compradas"
-  ansible.builtin.debug:
-    msg: "{{ seccion_persona }} ha comprado (carne): {{ item }}"
-  loop:
-    - "{{ carne_pollo }}"
-    - "{{ carne_pavo }}"
-    - "{{ carne_ternera }}"
-
-- name: "Listar pescados comprados"
-  ansible.builtin.debug:
-    msg: "{{ seccion_persona }} ha comprado (pescado): {{ item }}"
-  loop:
-    - "{{ pescado_salmon }}"
-    - "{{ pescado_merluza }}"
-
-- name: "Notificar fin de la compra de {{ seccion_persona }}"
-  ansible.builtin.debug:
-    msg: "Compra de {{ seccion_nombre }} completada"
-  notify: compra_finalizada
-```
-
-## 7. `handlers/main.yml`
-
-```yaml
----
-- name: compra_finalizada
-  ansible.builtin.debug:
-    msg: "Handler 'compra_finalizada' ejecutado por {{ seccion_persona }}"
-```
-
-## 8. `site.yml` (raíz, rama dev/moises)
-
-```yaml
----
-- name: Compra de la familia — Moisés (carne y pescado)
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  tasks:
-    - name: Cargar el rol de carne y pescado
-      import_role:
-        name: carne_pescado
-```
-
-## 9. Probar
+Pista bash:
 
 ```bash
-ansible-playbook -i inventory site.yml --syntax-check
-ansible-playbook -i inventory site.yml
+DIR=/tmp/compras/moises/carne_pescado
+mkdir -p "$DIR"
 ```
 
-## 10. Commitear
+En Ansible:
+
+- Mete esa `shell:` dentro de una tarea.
+- `ansible.builtin.shell` ejecuta cualquier línea como en terminal.
+
+## Paso 2 · Crear un archivo por carne
+
+Pista bash:
 
 ```bash
-git add .
-git commit -m "feat(role): add carne_pescado role - Moises"
+echo "Contramuslos de pollo" > "$DIR/pollo.txt"
+echo "Pechugas de pavo al ajillo" > "$DIR/pavo.txt"
+echo "Filetes de ternera" > "$DIR/ternera.txt"
 ```
 
-## 11. Patrón survey
+Truco: mete las 3 líneas en una sola tarea con bloque `|` y
+`args: { executable: /bin/bash }`.
 
-Igual que el resto: en la rama `survey`, los defaults pasan a
-`{{ carne_pollo_survey }}`, `{{ pescado_salmon_survey }}`... y los valores
-humanos se aportan con `vars_files` o `-e`.
+## Paso 3 · Crear un archivo por pescado
+
+```bash
+echo "Salmón fresco" > "$DIR/salmon.txt"
+echo "Merluza en rodajas" > "$DIR/merluza.txt"
+```
+
+## Paso 4 · Resumen
+
+```bash
+echo "--- Compra completada ---"
+ls "$DIR"
+```
+
+## Estructura esperada
+
+```
+roles/carne_pescado/
+├── README.md
+├── INSTRUCCIONES.md
+├── SOLUCION.md
+├── defaults/main.yml
+├── meta/main.yml
+├── tasks/main.yml
+└── vars/main.yml
+```
+
+> **No hay carpeta `handlers/`**. Las tareas son `changed_when: false`, no
+> necesitan notificaciones.
+
+## Cómo probarlo
+
+```bash
+ansible-playbook -i inventory-site.yml site.yml --syntax-check
+ansible-playbook -i inventory-site.yml site.yml
+ls /tmp/compras/moises/carne_pescado
+```

@@ -50,67 +50,41 @@ dependencies: []
 
 ```yaml
 ---
-- name: "Mostrar sección que gestiona {{ seccion_persona }}"
-  ansible.builtin.debug:
-    msg: "Sección: {{ seccion_nombre }} (autor: {{ rol_autor }})"
+- name: "Preparar carpeta para la compra del rol carne_pescado"
+  ansible.builtin.shell: |
+    DIR=/tmp/compras/moises/carne_pescado
+    mkdir -p "$DIR"
+    echo "Sección: Carne y pescado (Moisés)"
+  changed_when: false
 
-- name: "Listar carnes compradas"
-  ansible.builtin.debug:
-    msg: "{{ seccion_persona }} ha comprado (carne): {{ item }}"
-  loop:
-    - "{{ carne_pollo }}"
-    - "{{ carne_pavo }}"
-    - "{{ carne_ternera }}"
+- name: "Apuntar carnes compradas (un archivo por producto)"
+  ansible.builtin.shell: |
+    DIR=/tmp/compras/moises/carne_pescado
+    {
+      echo "Contramuslos de pollo"       > "$DIR/pollo.txt"
+      echo "Pechugas de pavo al ajillo"  > "$DIR/pavo.txt"
+      echo "Filetes de ternera"          > "$DIR/ternera.txt"
+    }
+  args:
+    executable: /bin/bash
+  changed_when: false
 
-- name: "Listar pescados comprados"
-  ansible.builtin.debug:
-    msg: "{{ seccion_persona }} ha comprado (pescado): {{ item }}"
-  loop:
-    - "{{ pescado_salmon }}"
-    - "{{ pescado_merluza }}"
+- name: "Apuntar pescados comprados (un archivo por producto)"
+  ansible.builtin.shell: |
+    DIR=/tmp/compras/moises/carne_pescado
+    {
+      echo "Salmón fresco"      > "$DIR/salmon.txt"
+      echo "Merluza en rodajas" > "$DIR/merluza.txt"
+    }
+  args:
+    executable: /bin/bash
+  changed_when: false
 
-- name: "Notificar fin de la compra de {{ seccion_persona }}"
-  ansible.builtin.debug:
-    msg: "Compra de {{ seccion_nombre }} completada"
-  notify: compra_finalizada
+- name: "Mostrar resumen final de la compra"
+  ansible.builtin.shell: |
+    echo "--- Compra de carne y pescado completada ---"
+    ls /tmp/compras/moises/carne_pescado
+  changed_when: false
 ```
 
-## `roles/carne_pescado/handlers/main.yml`
-
-```yaml
----
-- name: compra_finalizada
-  ansible.builtin.debug:
-    msg: "Handler 'compra_finalizada' ejecutado por {{ seccion_persona }}"
-```
-
-## `site.yml` (en raíz, rama dev/moises)
-
-```yaml
----
-- name: Compra de la familia — Moisés (carne y pescado)
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  tasks:
-    - name: Cargar el rol de carne y pescado
-      import_role:
-        name: carne_pescado
-```
-
-## Anexo: variante `survey` de `defaults/main.yml`
-
-```yaml
----
-seccion_persona: "Moisés"
-seccion_nombre: "Carne y pescado"
-
-carne_pollo: "{{ carne_pollo_survey }}"
-carne_pavo: "{{ carne_pavo_survey }}"
-carne_ternera: "{{ carne_ternera_survey }}"
-
-pescado_salmon: "{{ pescado_salmon_survey }}"
-pescado_merluza: "{{ pescado_merluza_survey }}"
-```
-
-Las tasks no cambian: siguen referenciando `{{ carne_pollo }}`, etc.
+> No existe `roles/carne_pescado/handlers/`.
