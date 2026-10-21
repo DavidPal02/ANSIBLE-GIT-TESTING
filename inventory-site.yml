@@ -1,0 +1,8 @@
+---
+# Inventario dedicado al playbook site.yml.
+# En dev/ricardo solo se ejecuta el rol verduras_frutas.
+
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
