@@ -1,4 +1,31 @@
 ---
+- name: Compra de la familia — Ricardo (verduras y frutas)
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Cargar el rol de verduras y frutas
+      import_role:
+        name: verduras_frutas
+
+- name: Compra de la familia — Moisés (carne y pescado)
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Cargar el rol de carne y pescado
+      import_role:
+        name: carne_pescado
+
+- name: Compra de la familia — Ángela (lácteos y galletas)
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Cargar el rol de lácteos y galletas
+      import_role:
+        name: lacteos_galletas
+
 - name: Compra de la familia — David (bebidas y refrescos)
   hosts: localhost
   connection: local
