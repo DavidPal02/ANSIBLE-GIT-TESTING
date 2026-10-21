@@ -1,0 +1,8 @@
+---
+# Inventario dedicado al playbook site.yml.
+# En dev/angela solo se ejecuta el rol lacteos_galletas.
+
+all:
+  hosts:
+    localhost:
+      ansible_connection: local
