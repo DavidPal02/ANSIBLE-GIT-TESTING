@@ -1,4 +1,0 @@
----
-- name: compra_finalizada
-  ansible.builtin.debug:
-    msg: "Handler 'compra_finalizada' ejecutado por {{ seccion_persona }}"
