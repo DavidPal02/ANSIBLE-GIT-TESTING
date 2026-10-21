@@ -1,0 +1,24 @@
+---
+- name: "Mostrar sección que gestiona {{ seccion_persona }}"
+  ansible.builtin.debug:
+    msg: "Sección: {{ seccion_nombre }} (autor: {{ rol_autor }})"
+
+- name: "Listar verduras compradas"
+  ansible.builtin.debug:
+    msg: "{{ seccion_persona }} ha comprado (verdura): {{ item }}"
+  loop:
+    - "{{ verduras_tomate }}"
+    - "{{ verduras_lechuga }}"
+    - "{{ verduras_pimiento }}"
+
+- name: "Listar frutas compradas"
+  ansible.builtin.debug:
+    msg: "{{ seccion_persona }} ha comprado (fruta): {{ item }}"
+  loop:
+    - "{{ frutas_manzana }}"
+    - "{{ frutas_platano }}"
+
+- name: "Notificar fin de la compra de {{ seccion_persona }}"
+  ansible.builtin.debug:
+    msg: "Compra de {{ seccion_nombre }} completada"
+  notify: compra_finalizada

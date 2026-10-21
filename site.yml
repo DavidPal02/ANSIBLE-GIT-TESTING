@@ -1,13 +1,9 @@
 ---
-# Playbook principal: se completa en cada rama (dev/ricardo, dev/moises, dev/angela).
-# En main importa los tres roles; en cada dev/* solo importa el rol correspondiente.
-# En survey se renombran los defaults para override externo (ver site_survey.yml).
-
-- name: Compra de la familia (placeholder)
+- name: Compra de la familia — Ricardo (verduras y frutas)
   hosts: localhost
   connection: local
   gather_facts: false
   tasks:
-    - name: Mensaje placeholder hasta integrar roles
-      ansible.builtin.debug:
-        msg: "site.yml se completará en cada rama con import_role"
+    - name: Cargar el rol de verduras y frutas
+      import_role:
+        name: verduras_frutas
