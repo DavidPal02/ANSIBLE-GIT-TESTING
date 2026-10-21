@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  role_name: bebidas_refrescos
+  author: David
+  description: Rol educativo que simula la compra de bebidas y refrescos.
+  license: MIT
+  min_ansible_version: "2.14"
+  platforms:
+    - name: local
+      versions:
+        - all
+  galaxy_tags:
+    - learning
+    - family
+    - compras
+
+dependencies: []

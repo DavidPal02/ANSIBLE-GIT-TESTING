@@ -1,0 +1,18 @@
+---
+# Variables por defecto del rol bebidas_refrescos (David)
+
+seccion_persona: "David"
+seccion_nombre: "Bebidas y refrescos"
+
+# Bebidas sin alcohol
+bebidas_agua: "Agua mineral 1.5L"
+bebidas_zumo_naranja: "Zumo de naranja natural"
+bebidas_zumo_manzana: "Zumo de manzana"
+
+# Refrescos
+refrescos_cola: "Refresco de cola"
+refrescos_limon: "Refresco de limón"
+refrescos_naranja: "Refresco de naranja"
+
+# Otros
+cerveza: "Cerveza rubia"
