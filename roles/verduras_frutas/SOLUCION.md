@@ -1,7 +1,5 @@
 # SOLUCIÓN — Rol verduras_frutas
 
-Ficheros completos del rol. Listos para copiar y pegar.
-
 ## `roles/verduras_frutas/defaults/main.yml`
 
 ```yaml
@@ -52,70 +50,42 @@ dependencies: []
 
 ```yaml
 ---
-- name: "Mostrar sección que gestiona {{ seccion_persona }}"
-  ansible.builtin.debug:
-    msg: "Sección: {{ seccion_nombre }} (autor: {{ rol_autor }})"
+- name: "Preparar carpeta para la compra del rol verduras_frutas"
+  ansible.builtin.shell: |
+    DIR=/tmp/compras/ricardo/verduras_frutas
+    mkdir -p "$DIR"
+    echo "Sección: Verduras y frutas (Ricardo)"
+  changed_when: false
 
-- name: "Listar verduras compradas"
-  ansible.builtin.debug:
-    msg: "{{ seccion_persona }} ha comprado (verdura): {{ item }}"
-  loop:
-    - "{{ verduras_tomate }}"
-    - "{{ verduras_lechuga }}"
-    - "{{ verduras_pimiento }}"
+- name: "Apuntar verduras compradas (un archivo por producto)"
+  ansible.builtin.shell: |
+    DIR=/tmp/compras/ricardo/verduras_frutas
+    {
+      echo "Tomates de rama"     > "$DIR/tomate.txt"
+      echo "Lechuga romana"     > "$DIR/lechuga.txt"
+      echo "Pimientos rojos"    > "$DIR/pimiento.txt"
+    }
+  args:
+    executable: /bin/bash
+  changed_when: false
 
-- name: "Listar frutas compradas"
-  ansible.builtin.debug:
-    msg: "{{ seccion_persona }} ha comprado (fruta): {{ item }}"
-  loop:
-    - "{{ frutas_manzana }}"
-    - "{{ frutas_platano }}"
+- name: "Apuntar frutas compradas (un archivo por producto)"
+  ansible.builtin.shell: |
+    DIR=/tmp/compras/ricardo/verduras_frutas
+    {
+      echo "Manzanas reineta"      > "$DIR/manzana.txt"
+      echo "Plátanos de Canarias"  > "$DIR/platano.txt"
+    }
+  args:
+    executable: /bin/bash
+  changed_when: false
 
-- name: "Notificar fin de la compra de {{ seccion_persona }}"
-  ansible.builtin.debug:
-    msg: "Compra de {{ seccion_nombre }} completada"
-  notify: compra_finalizada
+- name: "Mostrar resumen final de la compra"
+  ansible.builtin.shell: |
+    echo "--- Compra de verduras y frutas completada ---"
+    ls /tmp/compras/ricardo/verduras_frutas
+  changed_when: false
 ```
 
-## `roles/verduras_frutas/handlers/main.yml`
-
-```yaml
----
-- name: compra_finalizada
-  ansible.builtin.debug:
-    msg: "Handler 'compra_finalizada' ejecutado por {{ seccion_persona }}"
-```
-
-## `site.yml` (en raíz, rama dev/ricardo)
-
-```yaml
----
-- name: Compra de la familia — Ricardo (verduras y frutas)
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  tasks:
-    - name: Cargar el rol de verduras y frutas
-      import_role:
-        name: verduras_frutas
-```
-
-## Anexo: variante `survey` de `defaults/main.yml`
-
-En la rama `survey` los defaults pasan a ser referencias a variables `*_survey`:
-
-```yaml
----
-seccion_persona: "Ricardo"
-seccion_nombre: "Verduras y frutas"
-
-verduras_tomate: "{{ verduras_tomate_survey }}"
-verduras_lechuga: "{{ verduras_lechuga_survey }}"
-verduras_pimiento: "{{ verduras_pimiento_survey }}"
-
-frutas_manzana: "{{ frutas_manzana_survey }}"
-frutas_platano: "{{ frutas_platano_survey }}"
-```
-
-Y el `tasks/main.yml` se mantiene idéntico (sigue usando `verduras_tomate`,
-`frutas_manzana`, etc.). Los valores reales entran vía `vars_files` o `-e`.
+> **No existe** `roles/verduras_frutas/handlers/`. Las tareas son
+> `changed_when: false`, no disparan notificaciones.
