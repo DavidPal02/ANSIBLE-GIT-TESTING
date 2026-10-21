@@ -1,69 +1,62 @@
 # INSTRUCCIONES — Rol verduras_frutas (Ricardo)
 
-> **Pistas estilo bash** para construir el rol. Piénsalo como un script y luego
-> adáptalo a la sintaxis de Ansible (que es prácticamente la misma).
+Pistas para construir el rol paso a paso. Si te atascas, mira
+[SOLUCION.md](SOLUCION.md).
 
-## Paso 1 · Carpeta y variables
+## 1. Objetivo
+Imprimir la lista de verduras y frutas que Ricardo ha comprado, usando
+`ansible.builtin.debug`.
 
-Pista bash:
-
-```bash
-DIR=/tmp/compras/ricardo/verduras_frutas
-mkdir -p "$DIR"
-```
-
-En Ansible:
-
-- Mete esa `shell:` dentro de una tarea.
-- `ansible.builtin.shell` ejecuta cualquier línea como en terminal.
-
-## Paso 2 · Crear un archivo por verdura
-
-Pista bash:
+## 2. Crea la estructura de carpetas
 
 ```bash
-echo "Tomates de rama" > "$DIR/tomate.txt"
-echo "Lechuga romana" > "$DIR/lechuga.txt"
+mkdir -p roles/verduras_frutas/{defaults,meta,tasks,vars}
 ```
 
-Truco para meter varias líneas en una sola tarea → usa bloque `|` y `args: { executable: /bin/bash }`.
+> **No** crees `handlers/`. Este proyecto no usa handlers.
 
-## Paso 3 · Crear un archivo por fruta
+## 3. `defaults/main.yml`
 
-Misma idea que el paso 2, pero con los ficheros de frutas.
+Declara las variables con valores humanos. Convención: `<categoria>_<producto>`.
 
-## Paso 4 · Mostrar un resumen
+Pista: tomate, lechuga, pimiento (verduras) y manzana, plátano (frutas).
 
-Pista bash:
+## 4. `vars/main.yml`
 
-```bash
-echo "--- Compra completada ---"
-ls "$DIR"
+Igual que en los otros roles: autor, sección y versión. **Mayor precedencia**
+que `defaults`.
+
+## 5. `meta/main.yml`
+
+Define `galaxy_info` con `author: Ricardo`, plataforma `local`, tags
+`learning, family, compras`, y `dependencies: []`.
+
+## 6. `tasks/main.yml`
+
+Tareas `debug` con `msg`. Pista:
+
+```yaml
+- name: "..."
+  ansible.builtin.debug:
+    msg: "..."
 ```
 
-Igual que antes: una task `ansible.builtin.shell`.
+Orden sugerido:
+1. Mensaje de sección: `"Sección: {{ seccion_nombre }}"`.
+2. `loop:` por las verduras.
+3. `loop:` por las frutas.
+4. Mensaje final de "compra completada".
 
-## Estructura esperada
-
-```
-roles/verduras_frutas/
-├── README.md
-├── INSTRUCCIONES.md
-├── SOLUCION.md
-├── defaults/main.yml   ← nombres y valores humanos (sin tocar)
-├── meta/main.yml       ← solo metadata (autor, plataforma local)
-├── tasks/main.yml      ← lo que acabas de escribir
-└── vars/main.yml       ← autor + rol (metadatos internos)
-```
-
-> **Ya no hay carpeta `handlers/`**. Si te la encuentras en ejemplos online,
-> ignórala: en este proyecto no la usamos porque las tareas `shell` con
-> `changed_when: false` son "idempotentes" sin necesidad de handlers.
-
-## Cómo probarlo
+## 7. Probar
 
 ```bash
 ansible-playbook -i inventory-site.yml site.yml --syntax-check
 ansible-playbook -i inventory-site.yml site.yml
-ls /tmp/compras/ricardo/verduras_frutas
+```
+
+## 8. Commitear
+
+```bash
+git add .
+git commit -m "feat(role): add verduras_frutas role - Ricardo"
 ```

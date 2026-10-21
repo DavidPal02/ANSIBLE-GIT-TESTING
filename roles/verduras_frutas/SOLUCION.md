@@ -50,42 +50,28 @@ dependencies: []
 
 ```yaml
 ---
-- name: "Preparar carpeta para la compra del rol verduras_frutas"
-  ansible.builtin.shell: |
-    DIR=/tmp/compras/ricardo/verduras_frutas
-    mkdir -p "$DIR"
-    echo "Sección: Verduras y frutas (Ricardo)"
-  changed_when: false
+- name: "Mostrar sección que gestiona {{ seccion_persona }}"
+  ansible.builtin.debug:
+    msg: "Sección: {{ seccion_nombre }}"
 
-- name: "Apuntar verduras compradas (un archivo por producto)"
-  ansible.builtin.shell: |
-    DIR=/tmp/compras/ricardo/verduras_frutas
-    {
-      echo "Tomates de rama"     > "$DIR/tomate.txt"
-      echo "Lechuga romana"     > "$DIR/lechuga.txt"
-      echo "Pimientos rojos"    > "$DIR/pimiento.txt"
-    }
-  args:
-    executable: /bin/bash
-  changed_when: false
+- name: "Listar verduras compradas"
+  ansible.builtin.debug:
+    msg: "{{ seccion_persona }} ha comprado (verdura): {{ item }}"
+  loop:
+    - "{{ verduras_tomate }}"
+    - "{{ verduras_lechuga }}"
+    - "{{ verduras_pimiento }}"
 
-- name: "Apuntar frutas compradas (un archivo por producto)"
-  ansible.builtin.shell: |
-    DIR=/tmp/compras/ricardo/verduras_frutas
-    {
-      echo "Manzanas reineta"      > "$DIR/manzana.txt"
-      echo "Plátanos de Canarias"  > "$DIR/platano.txt"
-    }
-  args:
-    executable: /bin/bash
-  changed_when: false
+- name: "Listar frutas compradas"
+  ansible.builtin.debug:
+    msg: "{{ seccion_persona }} ha comprado (fruta): {{ item }}"
+  loop:
+    - "{{ frutas_manzana }}"
+    - "{{ frutas_platano }}"
 
-- name: "Mostrar resumen final de la compra"
-  ansible.builtin.shell: |
-    echo "--- Compra de verduras y frutas completada ---"
-    ls /tmp/compras/ricardo/verduras_frutas
-  changed_when: false
+- name: "Notificar fin de la compra de {{ seccion_persona }}"
+  ansible.builtin.debug:
+    msg: "Compra de {{ seccion_nombre }} completada"
 ```
 
-> **No existe** `roles/verduras_frutas/handlers/`. Las tareas son
-> `changed_when: false`, no disparan notificaciones.
+> No existe `roles/verduras_frutas/handlers/`.
