@@ -1,69 +1,63 @@
 # INSTRUCCIONES — Rol carne_pescado (Moisés)
 
-> **Pistas estilo bash** para construir el rol. Piénsalo como un script y luego
-> adáptalo a la sintaxis de Ansible (que es prácticamente la misma).
+Pistas para construir el rol paso a paso. Si te atascas, mira
+[SOLUCION.md](SOLUCION.md).
 
-## Paso 1 · Carpeta y variables
+## 1. Objetivo
+Imprimir la lista de carnes y pescados que Moisés ha comprado, usando
+`ansible.builtin.debug`.
 
-Pista bash:
-
-```bash
-DIR=/tmp/compras/moises/carne_pescado
-mkdir -p "$DIR"
-```
-
-En Ansible:
-
-- Mete esa `shell:` dentro de una tarea.
-- `ansible.builtin.shell` ejecuta cualquier línea como en terminal.
-
-## Paso 2 · Crear un archivo por carne
-
-Pista bash:
+## 2. Crea la estructura de carpetas
 
 ```bash
-echo "Contramuslos de pollo" > "$DIR/pollo.txt"
-echo "Pechugas de pavo al ajillo" > "$DIR/pavo.txt"
-echo "Filetes de ternera" > "$DIR/ternera.txt"
+mkdir -p roles/carne_pescado/{defaults,meta,tasks,vars}
 ```
 
-Truco: mete las 3 líneas en una sola tarea con bloque `|` y
-`args: { executable: /bin/bash }`.
+> **No** crees `handlers/`. Este proyecto no usa handlers.
 
-## Paso 3 · Crear un archivo por pescado
+## 3. `defaults/main.yml`
 
-```bash
-echo "Salmón fresco" > "$DIR/salmon.txt"
-echo "Merluza en rodajas" > "$DIR/merluza.txt"
+Declara las variables con valores humanos. Convención: `<categoria>_<producto>`.
+
+Pista: necesitas variables para pollo, pavo y ternera (carnes) y salmón y
+merluza (pescados).
+
+## 4. `vars/main.yml`
+
+Igual que en los otros roles: autor, sección y versión. **Mayor precedencia**
+que `defaults`.
+
+## 5. `meta/main.yml`
+
+Define `galaxy_info` con `author: Moisés`, plataforma `local`, tags
+`learning, family, compras`, y `dependencies: []`.
+
+## 6. `tasks/main.yml`
+
+Tareas `debug` con `msg`. Pista:
+
+```yaml
+- name: "..."
+  ansible.builtin.debug:
+    msg: "..."
 ```
 
-## Paso 4 · Resumen
+Orden sugerido:
+1. Mensaje de sección: `"Sección: {{ seccion_nombre }}"`.
+2. `loop:` por las carnes.
+3. `loop:` por los pescados.
+4. Mensaje final de "compra completada".
 
-```bash
-echo "--- Compra completada ---"
-ls "$DIR"
-```
-
-## Estructura esperada
-
-```
-roles/carne_pescado/
-├── README.md
-├── INSTRUCCIONES.md
-├── SOLUCION.md
-├── defaults/main.yml
-├── meta/main.yml
-├── tasks/main.yml
-└── vars/main.yml
-```
-
-> **No hay carpeta `handlers/`**. Las tareas son `changed_when: false`, no
-> necesitan notificaciones.
-
-## Cómo probarlo
+## 7. Probar
 
 ```bash
 ansible-playbook -i inventory-site.yml site.yml --syntax-check
 ansible-playbook -i inventory-site.yml site.yml
-ls /tmp/compras/moises/carne_pescado
+```
+
+## 8. Commitear
+
+```bash
+git add .
+git commit -m "feat(role): add carne_pescado role - Moises"
 ```
