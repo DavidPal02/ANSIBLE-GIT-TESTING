@@ -1,130 +1,60 @@
 # INSTRUCCIONES — Rol lacteos_galletas (Ángela)
 
-Tutorial paso a paso. Si te atascas, [SOLUCION.md](SOLUCION.md) tiene los ficheros completos.
+Pistas para construir el rol paso a paso. Si te atascas, mira
+[SOLUCION.md](SOLUCION.md).
 
 ## 1. Objetivo
-Imprimir la lista de lácteos y galletas que Ángela ha comprado.
+Imprimir la lista de lácteos y galletas que Ángela ha comprado, usando
+`ansible.builtin.debug` para que la salida sea legible.
 
-## 2. Crear la estructura
+## 2. Crea la estructura de carpetas
 
 ```bash
-mkdir -p roles/lacteos_galletas/{defaults,handlers,meta,tasks,vars}
+mkdir -p roles/lacteos_galletas/{defaults,meta,tasks,vars}
 ```
+
+> **No** crees `handlers/`. Este proyecto no usa handlers.
 
 ## 3. `defaults/main.yml`
 
-```yaml
----
-seccion_persona: "Ángela"
-seccion_nombre: "Lácteos y galletas"
+Declara las variables con valores humanos. Convención: `<categoria>_<producto>`.
 
-lacteos_leche: "Leche entera"
-lacteos_yogur: "Yogur natural"
-lacteos_queso: "Queso manchego"
-
-galletas_chocolate: "Galletas con pepitas de chocolate"
-galletas_maria: "Galletas María"
-```
+Pista: necesitas variables para leche, yogur, queso y dos tipos de galletas.
 
 ## 4. `vars/main.yml`
 
-```yaml
----
-rol_autor: "Ángela"
-rol_seccion: "lácteos y galletas"
-rol_version: "0.1.0"
-```
+Igual que en los otros roles: autor, sección y versión. **Mayor precedencia**
+que `defaults`.
 
 ## 5. `meta/main.yml`
 
-```yaml
----
-galaxy_info:
-  role_name: lacteos_galletas
-  author: Ángela
-  description: Rol educativo que simula la compra de lácteos y galletas.
-  license: MIT
-  min_ansible_version: "2.14"
-  platforms:
-    - name: local
-      versions:
-        - all
-  galaxy_tags:
-    - learning
-    - family
-    - compras
-
-dependencies: []
-```
+Define `galaxy_info` con `author: Ángela`, plataforma `local`, tags
+`learning, family, compras`, y `dependencies: []`.
 
 ## 6. `tasks/main.yml`
 
-```yaml
----
-- name: "Mostrar sección que gestiona {{ seccion_persona }}"
-  ansible.builtin.debug:
-    msg: "Sección: {{ seccion_nombre }} (autor: {{ rol_autor }})"
-
-- name: "Listar lácteos comprados"
-  ansible.builtin.debug:
-    msg: "{{ seccion_persona }} ha comprado (lácteo): {{ item }}"
-  loop:
-    - "{{ lacteos_leche }}"
-    - "{{ lacteos_yogur }}"
-    - "{{ lacteos_queso }}"
-
-- name: "Listar galletas compradas"
-  ansible.builtin.debug:
-    msg: "{{ seccion_persona }} ha comprado (galleta): {{ item }}"
-  loop:
-    - "{{ galletas_chocolate }}"
-    - "{{ galletas_maria }}"
-
-- name: "Notificar fin de la compra de {{ seccion_persona }}"
-  ansible.builtin.debug:
-    msg: "Compra de {{ seccion_nombre }} completada"
-  notify: compra_finalizada
-```
-
-## 7. `handlers/main.yml`
+Una tarea `debug` por mensaje. Pista:
 
 ```yaml
----
-- name: compra_finalizada
+- name: "..."
   ansible.builtin.debug:
-    msg: "Handler 'compra_finalizada' ejecutado por {{ seccion_persona }}"
+    msg: "..."
 ```
 
-## 8. `site.yml` (raíz, rama dev/angela)
+Empieza con un mensaje que diga `"Sección: {{ seccion_nombre }}"`, luego un
+`loop:` por los lácteos, otro por las galletas, y al final un mensaje de
+"compra completada".
 
-```yaml
----
-- name: Compra de la familia — Ángela (lácteos y galletas)
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  tasks:
-    - name: Cargar el rol de lácteos y galletas
-      import_role:
-        name: lacteos_galletas
-```
-
-## 9. Probar
+## 7. Probar
 
 ```bash
-ansible-playbook -i inventory site.yml --syntax-check
-ansible-playbook -i inventory site.yml
+ansible-playbook -i inventory-site.yml site.yml --syntax-check
+ansible-playbook -i inventory-site.yml site.yml
 ```
 
-## 10. Commitear
+## 8. Commitear
 
 ```bash
 git add .
 git commit -m "feat(role): add lacteos_galletas role - Angela"
 ```
-
-## 11. Patrón survey
-
-Mismo patrón: en la rama `survey`, los defaults pasan a
-`{{ lacteos_leche_survey }}`, `{{ galletas_chocolate_survey }}`... y los
-valores humanos entran vía `vars_files` o `-e`.

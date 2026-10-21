@@ -52,7 +52,7 @@ dependencies: []
 ---
 - name: "Mostrar sección que gestiona {{ seccion_persona }}"
   ansible.builtin.debug:
-    msg: "Sección: {{ seccion_nombre }} (autor: {{ rol_autor }})"
+    msg: "Sección: {{ seccion_nombre }}"
 
 - name: "Listar lácteos comprados"
   ansible.builtin.debug:
@@ -72,45 +72,6 @@ dependencies: []
 - name: "Notificar fin de la compra de {{ seccion_persona }}"
   ansible.builtin.debug:
     msg: "Compra de {{ seccion_nombre }} completada"
-  notify: compra_finalizada
 ```
 
-## `roles/lacteos_galletas/handlers/main.yml`
-
-```yaml
----
-- name: compra_finalizada
-  ansible.builtin.debug:
-    msg: "Handler 'compra_finalizada' ejecutado por {{ seccion_persona }}"
-```
-
-## `site.yml` (en raíz, rama dev/angela)
-
-```yaml
----
-- name: Compra de la familia — Ángela (lácteos y galletas)
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  tasks:
-    - name: Cargar el rol de lácteos y galletas
-      import_role:
-        name: lacteos_galletas
-```
-
-## Anexo: variante `survey` de `defaults/main.yml`
-
-```yaml
----
-seccion_persona: "Ángela"
-seccion_nombre: "Lácteos y galletas"
-
-lacteos_leche: "{{ lacteos_leche_survey }}"
-lacteos_yogur: "{{ lacteos_yogur_survey }}"
-lacteos_queso: "{{ lacteos_queso_survey }}"
-
-galletas_chocolate: "{{ galletas_chocolate_survey }}"
-galletas_maria: "{{ galletas_maria_survey }}"
-```
-
-Las `tasks` no cambian: siguen llamando a `lacteos_leche`, `galletas_chocolate`, etc.
+> No existe `roles/lacteos_galletas/handlers/`.

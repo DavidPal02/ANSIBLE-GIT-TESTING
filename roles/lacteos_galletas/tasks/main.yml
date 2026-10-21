@@ -1,7 +1,7 @@
 ---
 - name: "Mostrar sección que gestiona {{ seccion_persona }}"
   ansible.builtin.debug:
-    msg: "Sección: {{ seccion_nombre }} (autor: {{ rol_autor }})"
+    msg: "Sección: {{ seccion_nombre }}"
 
 - name: "Listar lácteos comprados"
   ansible.builtin.debug:
@@ -21,4 +21,3 @@
 - name: "Notificar fin de la compra de {{ seccion_persona }}"
   ansible.builtin.debug:
     msg: "Compra de {{ seccion_nombre }} completada"
-  notify: compra_finalizada
