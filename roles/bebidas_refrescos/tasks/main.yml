@@ -1,0 +1,30 @@
+---
+- name: "Mostrar sección que gestiona {{ seccion_persona }}"
+  ansible.builtin.debug:
+    msg: "Sección: {{ seccion_nombre }}"
+
+- name: "Listar bebidas sin alcohol"
+  ansible.builtin.debug:
+    msg: "{{ seccion_persona }} ha comprado (bebida): {{ item }}"
+  loop:
+    - "{{ bebidas_agua }}"
+    - "{{ bebidas_zumo_naranja }}"
+    - "{{ bebidas_zumo_manzana }}"
+
+- name: "Listar refrescos"
+  ansible.builtin.debug:
+    msg: "{{ seccion_persona }} ha comprado (refresco): {{ item }}"
+  loop:
+    - "{{ refrescos_cola }}"
+    - "{{ refrescos_limon }}"
+    - "{{ refrescos_naranja }}"
+
+- name: "Listar otras bebidas"
+  ansible.builtin.debug:
+    msg: "{{ seccion_persona }} ha comprado (otro): {{ item }}"
+  loop:
+    - "{{ cerveza }}"
+
+- name: "Notificar fin de la compra de {{ seccion_persona }}"
+  ansible.builtin.debug:
+    msg: "Compra de {{ seccion_nombre }} completada"
