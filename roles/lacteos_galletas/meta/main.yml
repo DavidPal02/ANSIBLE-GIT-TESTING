@@ -1,0 +1,17 @@
+---
+galaxy_info:
+  role_name: lacteos_galletas
+  author: Ángela
+  description: Rol educativo que simula la compra de lácteos y galletas.
+  license: MIT
+  min_ansible_version: "2.14"
+  platforms:
+    - name: local
+      versions:
+        - all
+  galaxy_tags:
+    - learning
+    - family
+    - compras
+
+dependencies: []
