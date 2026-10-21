@@ -1,0 +1,7 @@
+---
+# Variables internas del rol (mayor precedencia que defaults)
+# Aquí solo metadatos que el rol necesita siempre, no editables por el usuario.
+
+rol_autor: "Ricardo"
+rol_seccion: "verduras y frutas"
+rol_version: "0.1.0"

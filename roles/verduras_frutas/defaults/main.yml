@@ -1,0 +1,14 @@
+---
+# Variables por defecto del rol verduras_frutas (Ricardo)
+
+seccion_persona: "Ricardo"
+seccion_nombre: "Verduras y frutas"
+
+# Verduras
+verduras_tomate: "Tomates de rama"
+verduras_lechuga: "Lechuga romana"
+verduras_pimiento: "Pimientos rojos"
+
+# Frutas
+frutas_manzana: "Manzanas reineta"
+frutas_platano: "Plátanos de Canarias"
