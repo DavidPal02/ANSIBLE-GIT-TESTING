@@ -1,0 +1,16 @@
+---
+language: minimal
+dist: jammy
+
+env:
+  global:
+    - ANSIBLE_VERSION="core-2.16"
+
+install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y python3-pip
+  - pip3 install --user ansible=="${ANSIBLE_VERSION}.*"
+
+script:
+  - ansible-playbook -i inventory site.yml --syntax-check
+  - ansible-playbook -i inventory site.yml --check
