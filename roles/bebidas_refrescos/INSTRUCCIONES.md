@@ -77,3 +77,74 @@ ansible-playbook -i inventory-site.yml site.yml
 git add .
 git commit -m "feat(role): add bebidas_refrescos role - David"
 ```
+
+## 10. Abrir Pull Request hacia `main`
+
+Tienes dos caminos según dónde esté el remoto canónico.
+
+### 10.1 Si usas GitHub
+
+```bash
+# Asegúrate de tener tu rama al día con origin (o github).
+git push origin dev/david        # o: git push github dev/david
+
+# Crear la PR desde la terminal con la CLI de GitHub (gh).
+# Requiere: gh auth login hecho una vez.
+gh pr create \
+  --base main \
+  --head dev/david \
+  --title "feat(role): add bebidas_refrescos role - David" \
+  --body  "Añade el rol bebidas_refrescos (David) y su site.yml mínimo."
+```
+
+Si prefieres la web:
+
+```bash
+# Solo empuja, luego abre el enlace que devuelve.
+git push origin dev/david
+# GitHub te imprimirá: "Create a new pull request for 'dev/david'"
+# → https://github.com/<tu-org>/ANSIBLE-GIT-TESTING/pulls/new/dev/david
+```
+
+### 10.2 Si usas Gitea
+
+```bash
+git push origin dev/david
+# En la UI de Gitea: Repository → Pull Requests → New Pull Request
+# base: main   compare: dev/david
+```
+
+Equivalente desde la API REST de Gitea (asume variable
+`$GITEA_API` apuntando al repo, p. ej.
+`http://gitea:3000/api/v1/repos/PalDevOps-AWX/ANSIBLE-GIT-TESTING`):
+
+```bash
+TOKEN=xxxxxxxxxxxx
+curl -s -u "$GITEA_USER:$TOKEN" -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+        "head": "dev/david",
+        "base": "main",
+        "title": "feat(role): add bebidas_refrescos role - David"
+      }' \
+  "$GITEA_API/pulls"
+```
+
+### 10.3 Buenas prácticas
+
+- **Rebase primero** si `main` ha avanzado:
+  ```bash
+  git fetch origin main
+  git rebase origin/main
+  git push origin dev/david --force-with-lease
+  ```
+- **No mezcles roles**: tu PR solo trae tu propio rol más la actualización del
+  `site.yml` que sea necesaria. Si hay conflicto en `site.yml`, resuélvelo a
+  favor de la versión de `main` (que importa los 4 roles).
+- **Una vez mergeada la PR**, `main` ejecutará los 4 roles y mostrará la compra
+  completa:
+  ```bash
+  git checkout main
+  git pull
+  ansible-playbook -i inventory-site.yml site.yml
+  ```
