@@ -1,0 +1,24 @@
+---
+- name: "Mostrar sección que gestiona {{ seccion_persona }}"
+  ansible.builtin.debug:
+    msg: "Sección: {{ seccion_nombre }} (autor: {{ rol_autor }})"
+
+- name: "Listar carnes compradas"
+  ansible.builtin.debug:
+    msg: "{{ seccion_persona }} ha comprado (carne): {{ item }}"
+  loop:
+    - "{{ carne_pollo }}"
+    - "{{ carne_pavo }}"
+    - "{{ carne_ternera }}"
+
+- name: "Listar pescados comprados"
+  ansible.builtin.debug:
+    msg: "{{ seccion_persona }} ha comprado (pescado): {{ item }}"
+  loop:
+    - "{{ pescado_salmon }}"
+    - "{{ pescado_merluza }}"
+
+- name: "Notificar fin de la compra de {{ seccion_persona }}"
+  ansible.builtin.debug:
+    msg: "Compra de {{ seccion_nombre }} completada"
+  notify: compra_finalizada

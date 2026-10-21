@@ -1,0 +1,14 @@
+---
+# Variables por defecto del rol carne_pescado (Moisés)
+
+seccion_persona: "Moisés"
+seccion_nombre: "Carne y pescado"
+
+# Carnes
+carne_pollo: "Contramuslos de pollo"
+carne_pavo: "Pechugas de pavo al ajillo"
+carne_ternera: "Filetes de ternera"
+
+# Pescados
+pescado_salmon: "Salmón fresco"
+pescado_merluza: "Merluza en rodajas"
